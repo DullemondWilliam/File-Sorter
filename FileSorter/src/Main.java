@@ -12,11 +12,13 @@ public class Main {
     public static void main(String args[]) throws IOException {
     	allFiles = new ArrayList<String>();
  
-    	File file = new File("C:/Users/William/Documents/");
+    	File file = new File("C:/Users/Ares/Music/William Music");
     	
     	cleanDir(file);
+    	//printDir(0,file);
     	
-    	System.out.println(duplicates);
+    	System.out.println("Duplicates songs: "+duplicates);
+    	System.out.println("Unique songs: "+allFiles.size());
     }
 
     public static void cleanDir(File file){
@@ -28,26 +30,47 @@ public class Main {
         	}
         	
     	}else if(file.isFile()){
-    		String name = file.getName();
-    		if(nameExists(allFiles,file.getName())){
+    		if(nameExists(allFiles,file)){
     			duplicates++;
-    			//file.delete();
+    			System.out.println("* "+file.getName());
+    			file.delete();
     			//Delete it
     		}else{
-    			allFiles.add(file.getName());
+    			allFiles.add(standardName(file).toLowerCase());
+    			System.out.println(file.getName());
     		}
-    		
     	}else{
-    		System.err.println("What?");
+    		System.err.println(file.getName());
+    	}
+    }
+    
+    public static String standardName(File file){
+    	String name = file.getName();
+    	while(name.charAt(0) == 32 ||
+    			(name.charAt(0) <= 57 && 
+    			name.charAt(0) >= 48)){
+    		
+    		name = name.substring(1);
     	}
     	
     	
-    	
+    	//File newFile = new File(file.getParent()+ "\\"+name);
+        //System.out.println(file.renameTo(newFile));
+    	///////////////////////////////////////////////////////////////////////
+    	if(name.length() < 6)return name;
+        name = name.substring(0,name.length()-5);
+    	while(name.charAt(name.length()-1) == 32 ||
+    			(name.charAt(name.length()-1) <= 57 &&
+    			name.charAt(name.length()-1) >= 48)){
+    		name = name.substring(0, name.length()-2);
+    	}
+    	return name;
     }
     
-    public static Boolean nameExists(ArrayList<String> array, String name){
+    public static Boolean nameExists(ArrayList<String> array, File file){
+    	String name = standardName(file);
     	for(String a : array){
-    		if(a.toLowerCase().equals(name.toLowerCase())){
+    		if(a.equals(name.toLowerCase())){
     			return true;
     		}
     	}
@@ -55,7 +78,7 @@ public class Main {
     }
     
     
-    public static void listDir(int depth, File file){
+    public static void printDir(int depth, File file){
     	if(!file.isDirectory() || !file.canRead()){
     		return;
     	}
@@ -69,8 +92,8 @@ public class Main {
     		for(int j=0; j<depth; j++){
     			System.out.print("\t");
     		}
-    		System.out.println(subFiles[i]);
-    		listDir(depth+1,subFiles[i]);
+    		System.out.println(subFiles[i].getName());
+    		printDir(depth+1,subFiles[i]);
     	}
     }
 
