@@ -15,7 +15,8 @@ public class Main {
     	//cleanDuplicates(file);
     	//printDir(0,file);
     	//cleanEmptyFolders(file);
-    	collectFiles(file,file);
+    	//collectFiles(file,file);
+    	cleanFileNames(file);
     	
     	//System.out.println("Duplicates songs: "+duplicates);
     	//System.out.println("Unique songs: "+allFiles.size());
@@ -97,17 +98,44 @@ public class Main {
     		file.renameTo(newLoc);
     	}
     }
+   
+    public static void cleanFileNames(File file){
+    	if(file.isDirectory()){
+    		File[] subFiles = file.listFiles();
+    		for(File f : subFiles){
+    			cleanFileNames(f);
+    		}
+
+    	}else if(file.isFile()){
+    		try{
+    		String oldName = file.getName();
+    		String newName = standardName(file) 
+    				+ oldName.substring(oldName.lastIndexOf('.'));
+    		
+    		File newLoc = new File(file.getParent() + "/" + newName);
+    		System.out.println(newLoc);
+    		System.out.println(file);
+    		System.out.println(file.renameTo(newLoc));
+    		
+    		}catch(Exception e){
+    			System.err.println("err" + file.getName());
+    		}
+    	}
+    }
+   
+    
     ///////////////////////////////////////////////////////////////////////////
     public static String standardName(File file){
     	String name = file.getName();
     	while(name.charAt(0) == 32 ||
+    			name.charAt(0) == 45||
     			(name.charAt(0) <= 57 && 
     			name.charAt(0) >= 48)){
     		
     		name = name.substring(1);
-    	}    	
+    	}   	
     	if(name.length() < 6)return name;
-        name = name.substring(0,name.length()-5);
+        name = name.substring(0,name.length()-4);
     	while(name.charAt(name.length()-1) == 32 ||
     			(name.charAt(name.length()-1) <= 57 &&
     			name.charAt(name.length()-1) >= 48)){
