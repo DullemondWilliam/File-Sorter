@@ -16,7 +16,9 @@ public class Main {
     	//printDir(0,file);
     	//cleanEmptyFolders(file);
     	//collectFiles(file,file);
-    	cleanFileNames(file);
+    	//cleanFileNames(file);
+    	deleteFilesByExtension(file, ".jpeg");
+    	
     	
     	//System.out.println("Duplicates songs: "+duplicates);
     	//System.out.println("Unique songs: "+allFiles.size());
@@ -123,7 +125,20 @@ public class Main {
     	}
     }
    
-    
+    public static void deleteFilesByExtension(File file, String ext){
+    	if(file.isDirectory()){
+    		File[] subFiles = file.listFiles();
+    		for(File f : subFiles){
+    			cleanFileNames(f);
+    		}
+
+    	}else if(file.isFile()){
+    		String fileExt = file.getName().substring(file.getName().lastIndexOf('.'));
+    		if(ext.equalsIgnoreCase(fileExt)){
+    			file.delete();
+    		}
+    	}
+    }
     ///////////////////////////////////////////////////////////////////////////
     public static String standardName(File file){
     	String name = file.getName();
