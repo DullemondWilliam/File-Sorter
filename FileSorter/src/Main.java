@@ -14,14 +14,13 @@ public class Main {
     	
     	//cleanDuplicates(file);
     	//printDir(0,file);
-    	cleanEmptyFolders(file);
-    	
+    	//cleanEmptyFolders(file);
+    	collectFiles(file,file);
     	
     	//System.out.println("Duplicates songs: "+duplicates);
     	//System.out.println("Unique songs: "+allFiles.size());
     }
 
-    
     public static void cleanDuplicates(File file){
     	if(file.isDirectory()){
     		File subFiles[] = file.listFiles();
@@ -67,8 +66,6 @@ public class Main {
     public static void cleanEmptyFolders(File file){
     	if(!file.exists() || !file.isDirectory()){ return;}
     	
-    	//System.out.println(file);
-    	
     	File[] subFiles = file.listFiles();
     	if(subFiles.length == 0){
     		System.out.println("* "+file);
@@ -88,6 +85,18 @@ public class Main {
     	}
     }
     
+    public static void collectFiles(File dest, File file){
+    	if(file.isDirectory()){
+    		File[] subFiles = file.listFiles();
+    		for(File f : subFiles){
+    			collectFiles(dest, f);
+    		}
+    		
+    	}else if(file.isFile()){
+    		File newLoc = new File(dest.getPath() + "\\" + file.getName());
+    		file.renameTo(newLoc);
+    	}
+    }
     ///////////////////////////////////////////////////////////////////////////
     public static String standardName(File file){
     	String name = file.getName();
