@@ -1,27 +1,52 @@
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
+
+import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.audio.AudioHeader;
+import org.jaudiotagger.audio.exceptions.CannotReadException;
+import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
+import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
+import org.jaudiotagger.tag.FieldKey;
+import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.TagException;
+import org.jaudiotagger.tag.TagField;
 
 public class Main {
 
 	public static ArrayList<String> allFiles ;
 	public static int duplicates = 0;
 	
-    public static void main(String args[]) throws IOException {
+    public static void main(String args[]) throws IOException, CannotReadException, TagException, ReadOnlyFileException, InvalidAudioFrameException {
     	allFiles = new ArrayList<String>();
  
-    	File file = new File("C:/Users/Ares/Music/William Music");
+    	File file = new File("C:\\Users\\Ares\\Desktop\\William Music\\Dont Let Me Down (feat. Daya).mp3");
     	
     	//cleanDuplicates(file);
     	//printDir(0,file);
     	//cleanEmptyFolders(file);
     	//collectFiles(file,file);
     	//cleanFileNames(file);
-    	deleteFilesByExtension(file, ".jpeg");
+    	//deleteFilesByExtension(file, ".jpeg");
     	
     	
     	//System.out.println("Duplicates songs: "+duplicates);
     	//System.out.println("Unique songs: "+allFiles.size());
+    	
+    	AudioFile f = AudioFileIO.read(file);
+    	
+    	Tag tag = f.getTag();
+    	System.out.println("artist: "+tag.getFirst(FieldKey.ARTIST));
+    	System.out.println("artists: "+tag.getFirst(FieldKey.ARTISTS));
+    	System.out.println("album: "+tag.getFirst(FieldKey.ALBUM));
+    	System.out.println("album artist: "+tag.getFirst(FieldKey.ALBUM_ARTIST));
+    	System.out.println("title: "+tag.getFirst(FieldKey.TITLE));
+    	System.out.println("track: "+tag.getFirst(FieldKey.TRACK));
+    	System.out.println("year: "+tag.getFirst(FieldKey.YEAR));
+
+    	
     }
 
     public static void cleanDuplicates(File file){
