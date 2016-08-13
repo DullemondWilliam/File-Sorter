@@ -1,19 +1,17 @@
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Dictionary;
 import java.util.HashMap;
-import java.util.Iterator;
 
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
-import org.jaudiotagger.audio.AudioHeader;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagException;
-import org.jaudiotagger.tag.TagField;
 
 public class Main {
 
@@ -25,6 +23,7 @@ public class Main {
 			throws IOException, CannotReadException, TagException, ReadOnlyFileException, InvalidAudioFrameException {
 		allFiles = new ArrayList<String>();
 		artistMap = new HashMap<String, File>();
+
 
 		File file = new File("C:\\Users\\Ares\\Music\\William Music\\");
 
@@ -218,6 +217,31 @@ public class Main {
 			name = name.substring(0, name.length() - 2);
 		}
 		return name;
+	}
+
+	public static String cleanMusicFileName(File file) {
+
+		return "";
+	}
+
+	public static String getArtistName(File file){
+		String artist = "unknown";
+		try {
+			AudioFile f = AudioFileIO.read(file);
+			Tag tag = f.getTag(); 
+			try{
+				artist = tag.getFirst(FieldKey.ARTIST);
+			}catch (Exception e){
+				try{
+					artist = tag.getFirst(FieldKey.ARTISTS);
+				}catch (Exception r){
+					try{
+						artist = tag.getFirst(FieldKey.ALBUM_ARTIST);
+					}catch (Exception t) {}
+				}
+			}
+		} catch (Exception e1) {}
+		return artist;
 	}
 
 	public static Boolean nameExists(ArrayList<String> array, File file) {
