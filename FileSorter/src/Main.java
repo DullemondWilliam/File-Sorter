@@ -1,7 +1,6 @@
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.HashMap;
 
 import org.jaudiotagger.audio.AudioFile;
@@ -220,8 +219,13 @@ public class Main {
 	}
 
 	public static String cleanMusicFileName(File file) {
-
-		return "";
+		String artist = "unknown";
+		try {
+			AudioFile f = AudioFileIO.read(file);
+			Tag tag = f.getTag(); 
+			artist = tag.getFirst(FieldKey.ARTIST);
+		} catch (Exception e1) {}
+		return artist;
 	}
 
 	public static String getArtistName(File file){
